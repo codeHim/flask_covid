@@ -1,0 +1,229 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+
+  <title>Covid19India.club</title>
+
+
+  <link rel="stylesheet" href="../static/style-starter.css">
+  <link rel="stylesheet" href="../static/styles.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/JavaScript" src="../static/jquery.js"></script>
+  <script type="text/JavaScript" src='../static/statelist.js'></script>
+
+  <link href="//fonts.googleapis.com/css?family=Nunito:300,400,600,700,800,900&display=swap" rel="stylesheet">
+</head>
+<script>
+  if('{{ error }}'=='1'){alert('Your inputs were not valid. Please try again!');window.location.href = "/";}
+</script>
+<body class="sidebar-menu-collapsed">
+  
+<section>
+  <div class="sidebar-menu sticky-sidebar-menu">
+    <div class="sidebar-menu-inner">
+      <ul class="nav nav-pills nav-stacked custom-nav">
+      </ul>
+    </div>
+  </div>
+  <div class=" sticky-header">
+
+        <h2 style="text-align:center; color:white; font-size: 24px; font-weight: 600">Covid19India.club</h2>
+  </div>
+
+<div class="main-content">
+    <div class="statistics">
+      <div class="row">
+        <div class="col-xl-6 pr-xl-2">
+          <div class="row">
+            <div class="col-sm-6 pr-sm-2 statistics-grid">
+              <div class="card card_border border-primary-top p-4">
+                <i class="lnr lnr-users"> </i>
+                <h3 class="text-primary number">{{ total['confirmed'] }}</h3>
+                <p class="stat-text">Confirmed</p>
+              </div>
+            </div>
+            <div class="col-sm-6 pl-sm-2 statistics-grid">
+              <div class="card card_border border-primary-top p-4">
+                <i class="lnr lnr-checkmark-circle"> </i>
+                <h3 class="text-secondary number">{{ total['active'] }}</h3>
+                <p class="stat-text">Active</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 pl-xl-2">
+          <div class="row">
+            <div class="col-sm-6 pr-sm-2 statistics-grid">
+              <div class="card card_border border-primary-top p-4">
+                <i class="lnr lnr-thumbs-up"> </i>
+                <h3 class="text-success number">{{ total['recovered'] }}</h3>
+                <p class="stat-text">Recovered</p>
+              </div>
+            </div>
+            <div class="col-sm-6 pl-sm-2 statistics-grid">
+              <div class="card card_border border-primary-top p-4">
+                <i class="lnr lnr-cross"> </i>
+                <h3 class="text-danger number">{{ total['deaths'] }}</h3>
+                <p class="stat-text">Deaths</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="data-tables">
+            <div class="row">
+                
+              <div class="col-lg-12 mb-4">
+                <div class="card card_border p-4">
+                  <h3 class="card__title position-absolute">NationWide Count</h3>
+                  <div class="table-responsive">
+                    <div id="example_wrapper" class="dataTables_wrapper no-footer"><div id="example_filter" class="dataTables_filter"><label></label></div>
+                      <table class="table table-striped" style="width:100%;">
+                        <thead>
+                        <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" style="width: 44px;">S/N</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1"  style="width: 89px;">State</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1"  style="width: 80px;">Confirmed</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 97px;">Recovered</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 97px;">Deaths</th>
+                        </tr>
+                      </thead>
+                      <tbody>    
+                            {% for i in data %}
+
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ i['state'] }}</td>
+                                <td>{{ i['confirmed'] }}</td>
+                                <td>{{ i['recovered'] }}</td>
+                                <td>{{ i['deaths'] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                      </div>
+                </div>
+              </div>
+            </div>
+            </div>
+
+    <div class="chart">
+      <div class="row">
+        <div class="col-lg-6 pr-lg-2 chart-grid">
+          <div class="card text-center card_border">
+            <div class="card-header chart-grid__header">
+              Month wise stats
+            </div>
+            <div class="card-body">
+              
+              <div id="container">
+                <canvas id="barchart"></canvas>
+              </div>
+             
+            </div>
+            <div class="card-footer text-muted chart-grid__footer">
+              Updated few hours ago
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 pr-lg-2 chart-grid">
+          <div class="card-body">
+            <form action="/subscribe/" method="POST">
+          
+                <div class="form-group">
+                  <h4 style="color: #4755AB;">* Subscribe to get daily updated of your region.</h4>
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <label for="exampleInputState" class="input__label">Select State</label>
+                    <select id="selectedState" name="state" onchange='selectDistrict(this.value)' required></select>
+                    <label for="exampleInputDistrict" class="input__label">Select District</label>
+                    <select id='districtList' name="district" required></select>
+                    <label for="exampleInputNumber" class="input__label">Phone Number</label>
+                    <input type="text" pattern="[1-9]{1}[0-9]{9}" title="Enter 10 digit mobile number" class="form-control input-style" id="exampleInputNumber"
+                        name='contact' aria-describedby="numberHelp" placeholder="Enter Phone Number" required>
+                    <small id="numberHelp" class="form-text text-muted">We'll never share your number with
+                        anyone else.</small>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputName" class="input__label">Name</label>
+                    <input type="text" class="form-control input-style" id="exampleInputName"
+                        placeholder="Name" name='name' required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-style mt-4">Subscribe</button>
+            </form>
+        </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<footer class="dashboard">
+
+</footer>
+
+<script src="../static/Chart.min.js"></script>
+<script>
+  var ctx = document.getElementById("barchart").getContext("2d");
+  var confirm,recover,deaths = []
+  confirm = '{{ confirm }}'
+  recover = '{{ recover }}'
+  deaths = '{{ death }}'
+  var barchart = new Chart(ctx, {
+	type: 'line',
+	data: {
+		labels: ['February','March', 'April', 'May'],
+		datasets: [{
+      data: JSON.parse(confirm),
+			label: 'Confirmed',
+      borderColor : "#4755AB",
+			borderWidth: 3,
+		}, {
+      data: JSON.parse(recover),
+			label: 'Recovered',
+      borderColor : "green",
+			borderWidth: 3,
+		},
+    {
+     data: JSON.parse(deaths),
+			label: 'Deaths',
+      borderColor : "red",
+			borderWidth: 3,
+		}]
+  },
+  scaleSteps:10,
+	options: {
+    responsive: true,
+    scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true,
+                      steps: 10,
+                      stepValue: 6,
+                     max: 70000
+                      }
+                  }
+              ]
+          },
+		legend: {
+			position: 'top',
+		},
+	}
+});
+
+</script>
+
+
+<script src="../static/jquery-3.3.1.min.js"></script>
+<script src="../static/jquery-1.10.2.min.js"></script>
+<script src="../static/bootstrap.min.js"></script>
+
+</body>
+
+</html>

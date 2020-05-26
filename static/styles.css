@@ -1,0 +1,138 @@
+table{ 
+  border: 2px solid black;
+    margin-bottom: 100px;
+    
+}
+
+.data-table{
+    margin-left: 80px;
+}
+
+head{
+    color: white;
+    text-align: center;
+    
+}
+
+
+
+#head-bar{
+    height: 40px;
+    width: 100%;
+    background-color: #585352;
+    text-align: center;
+    font-size: 30px;
+    position: fixed;
+    color: white;
+    top: 0;
+    
+}
+
+#news{
+    background-color: white;
+    height: 30px;
+    width: 100%;
+    margin-top: 40px;
+    
+}
+#graphs{
+    text-align: right;
+}
+
+#chart{
+    background-color: black;
+    align-content: center;
+}
+
+.sidenav {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 200px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 2;
+    background-color: transparent; /* Black */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top:130px;
+  }
+
+  .sidenav a {
+    margin-top: 50px;
+    text-decoration: underline;
+    font-size: 25px;
+    margin-left: 30px;
+    display: block;
+  }
+
+  .footer{
+      bottom: 0;
+      position: fixed;
+      height: 20px;
+      width: 100%;
+      background-color: #585352;
+  }
+
+  .chart{
+      width: 100%;
+  }
+  .container{
+      margin-top: 50px;
+  }
+
+
+  form {
+    border: 3px solid #f1f1f1;
+    font-family: Arial;
+  }
+  
+  .container {
+    padding: 20px;
+    background-color: #f1f1f1;
+  }
+  
+  input[type=text], input[type=submit] ,input[type=number],input[type=number],select{
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    background-color: transparent;
+  }
+  
+  input[type=checkbox] {
+    margin-top: 16px;
+  }
+  
+  input[type=submit] {
+    background-color: #585352;
+    color: white;
+    border: none;
+  }
+  
+  input[type=submit]:hover {
+    opacity: 0.8;
+  }
+
+.subscribe{
+    background-color: #585352;
+    font-size: 18px;
+}
+
+
+.tablink {
+  background-color: #585352;
+  color: white;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width:50%;
+  padding-left: 80px;
+}
+
+.tablink:hover {
+  background-color: #777;
+}

@@ -25,48 +25,33 @@ def showChartData():
     try:
         data = requests.get("https://api.covid19india.org/data.json")
         time_series_data = data.json()['cases_time_series']
-        feb_c = 0
-        feb_r = 0
-        feb_d = 0
-        mar_c = 0
-        mar_r = 0
-        mar_d = 0
-        apr_c = 0
-        apr_r = 0
-        apr_d = 0
-        may_c = 0
-        may_r = 0
-        may_d = 0
+        mon_c = 0
+        mon_r = 0
+        mon_d = 0
+        confirmed = []
+        recovered = []
+        deaths = []
         final = {}
-        for item in time_series_data:
-            if item['date'].strip() == '29 February':
-                feb_c = int(item['totalconfirmed'])
-                feb_r = int(item['totalrecovered'])
-                feb_d = int(item['totaldeceased'])
-            elif item['date'].strip() == '31 March':
-                mar_c = int(item['totalconfirmed']) - feb_c
-                mar_r = int(item['totalrecovered']) - feb_r 
-                mar_d = int(item['totaldeceased']) - feb_d
-            elif item['date'].strip() == '30 April': 
-                apr_c = int(item['totalconfirmed']) - mar_c
-                apr_r = int(item['totalrecovered']) - mar_r 
-                apr_d = int(item['totaldeceased']) - mar_d 
-            else:
-                if item['date'].strip() == '26 May':     #till latest date.
-                    may_c = int(item['totalconfirmed']) - apr_c
-                    may_r = int(item['totalrecovered']) - apr_r
-                    may_d = int(item['totaldeceased']) - apr_d
-        confirmed =[feb_c,mar_c,apr_c,may_c]
-        recovered = [feb_r,mar_r,apr_r,may_r]
-        deaths = [feb_d,mar_d,apr_d,may_d]
+        date_list = ['29 February','31 March','30 April','31 May']
+        chart_data = list(filter(lambda item: item['date'].strip() in date_list,time_series_data))
+        
+        for item in chart_data:
+            mon_c = int(item['totalconfirmed'])
+            mon_r = int(item['totalrecovered'])
+            mon_d = int(item['totaldeceased'])
+            confirmed.append(mon_c)
+            recovered.append(mon_r)
+            deaths.append(mon_d)
+
         final_dict = {
             'confirmed' : confirmed,
             'recovered' : recovered,
             'deaths' : deaths
         }
+        
         return final_dict
 
-    except Exception as e:
+    except:
         print(traceback.print_exc())
         return redirect('/')
 

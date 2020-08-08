@@ -9,7 +9,7 @@
   <title>Covid19India.club</title>
 
 
-  <link rel="stylesheet" href="../static/style-starter.css">
+  <link rel="stylesheet" href="../static/styles2.css">
   <link rel="stylesheet" href="../static/styles.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script type="text/JavaScript" src="../static/jquery.js"></script>
@@ -127,7 +127,7 @@
              
             </div>
             <div class="card-footer text-muted chart-grid__footer">
-              Updated few hours ago
+              Updated few minutes ago
             </div>
           </div>
         </div>
@@ -171,14 +171,16 @@
 <script src="../static/Chart.min.js"></script>
 <script>
   var ctx = document.getElementById("barchart").getContext("2d");
-  var confirm,recover,deaths = []
+  var confirm,recover,deaths,month_labels = []
   confirm = '{{ confirm }}'
   recover = '{{ recover }}'
   deaths = '{{ death }}'
+  month_labels = '{{ months|tojson }}'
+  console.log('{{ months|tojson }}');
   var barchart = new Chart(ctx, {
 	type: 'line',
 	data: {
-		labels: ['February','March', 'April', 'May'],
+		labels: JSON.parse(month_labels),
 		datasets: [{
       data: JSON.parse(confirm),
 			label: 'Confirmed',
@@ -206,7 +208,7 @@
                       beginAtZero: true,
                       steps: 10,
                       stepValue: 6,
-                     max: 250000
+                     max: 2500000
                       }
                   }
               ]

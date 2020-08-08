@@ -13,6 +13,10 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import CSRFProtect
 
+import datetime
+from dateutil import parser
+import calendar
+
 app = Flask(__name__)
 cors = CORS(app)
 csrf = CSRFProtect(app)
@@ -21,20 +25,29 @@ SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
 
 
+
 def showChartData():
     try:
         data = requests.get("https://api.covid19india.org/data.json")
         time_series_data = data.json()['cases_time_series']
+        time_series_data.sort(key = lambda x: parser.parse(x['date'].strip()))
+
         mon_c = 0
         mon_r = 0
         mon_d = 0
         confirmed = []
         recovered = []
         deaths = []
-        final = {}
-        date_list = ['29 February','31 March','30 April','31 May']
-        chart_data = list(filter(lambda item: item['date'].strip() in date_list,time_series_data))
+        months = []
+        date_list = []
+        for item in time_series_data:
+            date_list.append(parser.parse(item['date'].strip()))
+
+        month_last_dates = [datetime.datetime(date.year, date.month,
+        calendar.monthrange(date.year, date.month)[1]) for date in date_list]    
         
+        month_last_dates = set(month_last_dates)
+        chart_data = list(filter(lambda item: parser.parse(item['date'].strip()) in month_last_dates,time_series_data))
         for item in chart_data:
             mon_c = int(item['totalconfirmed'])
             mon_r = int(item['totalrecovered'])
@@ -42,13 +55,14 @@ def showChartData():
             confirmed.append(mon_c)
             recovered.append(mon_r)
             deaths.append(mon_d)
+            months.append(item['date'].strip().split()[1])
 
         final_dict = {
             'confirmed' : confirmed,
             'recovered' : recovered,
-            'deaths' : deaths
+            'deaths' : deaths,
+            'months' : months
         }
-        
         return final_dict
 
     except:
@@ -103,7 +117,8 @@ def index():
     try:
         final = showChartData()
         final_data,total_data = getStateData()
-        return render_template('index.html',data=final_data,updateUser=updateUser,total=total_data,confirm=final['confirmed'],recover=final['recovered'],death=final['deaths'],error=0)
+        print(final['months'])
+        return render_template('index.html',data=final_data,updateUser=updateUser,total=total_data,confirm=final['confirmed'],recover=final['recovered'],death=final['deaths'],months=final['months'],error=0)
     except Exception as e:
         return "We are under maintainance. The site will be back soon."
 
@@ -133,4 +148,3 @@ def getStateData():
         return sortedList,total
     except Exception as e:
         return "redirect('/')"
-

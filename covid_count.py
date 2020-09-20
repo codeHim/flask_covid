@@ -25,7 +25,7 @@ SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
 
 
-
+"minor fix"
 def showChartData():
     try:
         data = requests.get("https://api.covid19india.org/data.json")
